@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "battlenet.oauth")
 public class BattleNetOAuthProperties {
+    private String tokenUri;
     private String clientId;
     private String clientSecret;
 }
