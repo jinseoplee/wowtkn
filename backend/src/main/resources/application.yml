@@ -17,3 +17,9 @@ battlenet:
     token-uri: https://oauth.battle.net/token
     client-id: ${CLIENT_ID}
     client-secret: ${CLIENT_SECRET}
+
+wow:
+  token:
+    api:
+      base-url: https://{region}.api.blizzard.com/data/wow/token/
+      namespace: dynamic-{region}
