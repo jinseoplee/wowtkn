@@ -47,7 +47,7 @@ public class WowTokenQueryServiceImpl implements WowTokenQueryService {
                             currentToken.getTimestamp(),
                             currentToken.getPrice(),
                             priceChangeInfo.changeAmount,
-                            priceChangeInfo.formattedChangeRate
+                            priceChangeInfo.changeRate
                     );
                 })
                 .toList();
@@ -96,14 +96,12 @@ public class WowTokenQueryServiceImpl implements WowTokenQueryService {
                 changeRate = ((double) changeAmount / previousPrice) * 100.0;
             }
         }
-        String formattedChangeRate = String.format("%.1f", changeRate);
-
-        return new PriceChangeInfo(changeAmount, formattedChangeRate);
+        return new PriceChangeInfo(changeAmount, changeRate);
     }
 
     /**
      * 가격 변동량과 변동률을 전달하기 위한 내부 레코드
      */
-    private record PriceChangeInfo(int changeAmount, String formattedChangeRate) {
+    private record PriceChangeInfo(int changeAmount, double changeRate) {
     }
 }

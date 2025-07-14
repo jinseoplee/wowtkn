@@ -7,6 +7,6 @@ public record CurrentWowTokenResponse(
         long timestamp,
         int price,
         int changeAmount,
-        String changeRate
+        double changeRate
 ) {
 }
