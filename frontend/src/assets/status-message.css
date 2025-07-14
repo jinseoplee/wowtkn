@@ -1,0 +1,15 @@
+.message-box {
+    background-color: var(--background-dark-secondary);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-sm);
+    text-align: center;
+    font-size: 1.1em;
+}
+
+.message--loading {
+    color: var(--color-text-muted);
+}
+
+.message--error {
+    color: var(--color-price-down);
+}
