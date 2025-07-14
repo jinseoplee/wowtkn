@@ -1,5 +1,6 @@
 package com.wowtkn.backend.repository;
 
+import com.wowtkn.backend.common.Region;
 import com.wowtkn.backend.entity.WowToken;
 import com.wowtkn.backend.repository.projection.RegionMaxTimestamp;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -44,4 +45,14 @@ public interface WowTokenRepository extends JpaRepository<WowToken, Integer> {
                 wt.region, wt.timestamp DESC
             """, nativeQuery = true)
     List<WowToken> findLatestTwoTokensByRegion();
+
+    /**
+     * 특정 리전과 타임스탬프 범위 내의 {@link WowToken} 데이터를 오름차순으로 조회한다.
+     *
+     * @param region 조회할 리전 (예: US, EU, KR, TW)
+     * @param startTimestamp 조회 시작 타임스탬프
+     * @param endTimestamp 조회 종료 타임스탬프
+     * @return 조건에 해당하는 {@link WowToken} 리스트
+     */
+    List<WowToken> findByRegionAndTimestampBetweenOrderByTimestampAsc(Region region, Long startTimestamp, Long endTimestamp);
 }

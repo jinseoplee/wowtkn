@@ -2,6 +2,7 @@ package com.wowtkn.backend.service;
 
 import com.wowtkn.backend.common.Region;
 import com.wowtkn.backend.dto.CurrentWowTokenResponse;
+import com.wowtkn.backend.dto.WowTokenHistoryPoint;
 import com.wowtkn.backend.entity.WowToken;
 import com.wowtkn.backend.repository.WowTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +50,19 @@ public class WowTokenQueryServiceImpl implements WowTokenQueryService {
                             priceChangeInfo.formattedChangeRate
                     );
                 })
+                .toList();
+    }
+
+    @Override
+    public List<WowTokenHistoryPoint> getWowTokensByRegionAndPeriod(Region region, Long startTimestamp, Long endTimestamp) {
+        List<WowToken> tokens = wowTokenRepository.findByRegionAndTimestampBetweenOrderByTimestampAsc(
+                region,
+                startTimestamp,
+                endTimestamp
+        );
+
+        return tokens.stream()
+                .map(token -> new WowTokenHistoryPoint(token.getTimestamp(), token.getPrice()))
                 .toList();
     }
 
