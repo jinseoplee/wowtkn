@@ -1,4 +1,6 @@
-<script setup></script>
+<script setup>
+import PriceInfo from "./components/PriceInfo.vue";
+</script>
 
 <template>
   <div id="app-wrapper">
@@ -11,7 +13,9 @@
     </header>
 
     <main class="app-main">
-      <div class="container"></div>
+      <div class="container">
+        <PriceInfo />
+      </div>
     </main>
 
     <footer class="app-footer"></footer>
