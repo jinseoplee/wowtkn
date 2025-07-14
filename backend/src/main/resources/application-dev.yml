@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/wowtkn
+    username: root
+    password: 1234
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+cors:
+  allowed-origins:
+    - "http://localhost:5173"
+    - "http://localhost:3000"
+    - "http://192.168.50.130:5173"

@@ -2,6 +2,7 @@ package com.wowtkn.backend.service;
 
 import com.wowtkn.backend.common.Region;
 import com.wowtkn.backend.dto.CurrentWowTokenResponse;
+import com.wowtkn.backend.dto.WowTokenHistoryPoint;
 import com.wowtkn.backend.entity.WowToken;
 import com.wowtkn.backend.repository.WowTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,9 +47,22 @@ public class WowTokenQueryServiceImpl implements WowTokenQueryService {
                             currentToken.getTimestamp(),
                             currentToken.getPrice(),
                             priceChangeInfo.changeAmount,
-                            priceChangeInfo.formattedChangeRate
+                            priceChangeInfo.changeRate
                     );
                 })
+                .toList();
+    }
+
+    @Override
+    public List<WowTokenHistoryPoint> getWowTokensByRegionAndPeriod(Region region, Long startTimestamp, Long endTimestamp) {
+        List<WowToken> tokens = wowTokenRepository.findByRegionAndTimestampBetweenOrderByTimestampAsc(
+                region,
+                startTimestamp,
+                endTimestamp
+        );
+
+        return tokens.stream()
+                .map(token -> new WowTokenHistoryPoint(token.getTimestamp(), token.getPrice()))
                 .toList();
     }
 
@@ -82,14 +96,12 @@ public class WowTokenQueryServiceImpl implements WowTokenQueryService {
                 changeRate = ((double) changeAmount / previousPrice) * 100.0;
             }
         }
-        String formattedChangeRate = String.format("%.1f", changeRate);
-
-        return new PriceChangeInfo(changeAmount, formattedChangeRate);
+        return new PriceChangeInfo(changeAmount, changeRate);
     }
 
     /**
      * 가격 변동량과 변동률을 전달하기 위한 내부 레코드
      */
-    private record PriceChangeInfo(int changeAmount, String formattedChangeRate) {
+    private record PriceChangeInfo(int changeAmount, double changeRate) {
     }
 }
