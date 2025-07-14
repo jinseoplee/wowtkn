@@ -8,3 +8,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+
+cors:
+  allowed-origins:
+    - "https://www.wowtkn.com"
+    - "https://wowtkn.com"
