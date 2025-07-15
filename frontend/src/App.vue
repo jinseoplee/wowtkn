@@ -1,5 +1,6 @@
 <script setup>
 import PriceInfo from "./components/PriceInfo.vue";
+import PriceChart from "./components/PriceChart.vue";
 </script>
 
 <template>
@@ -15,6 +16,7 @@ import PriceInfo from "./components/PriceInfo.vue";
     <main class="app-main">
       <div class="container">
         <PriceInfo />
+        <PriceChart />
       </div>
     </main>
 
