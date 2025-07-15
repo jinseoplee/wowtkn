@@ -54,3 +54,26 @@ export const formatChangeRate = (rate) => {
   }
   return `${rate.toFixed(1)}%`;
 };
+
+/**
+ * 주어진 timestamp를 지정한 시간대 기준으로 "MM-DD HH:mm" 형식으로 포맷한다.
+ *
+ * @param {number} timestamp - UNIX timestamp (밀리초 단위)
+ * @param {string} timeZone - IANA 표준 시간대 (예: "America/New_York", "Asia/Seoul")
+ * @returns {string} - "MM-DD HH:mm" 포맷의 문자열 (예: "07-15 09:00")
+ */
+export const formatDateTime = (timestamp, timeZone) => {
+  const date = new Date(timestamp);
+  const options = {
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: timeZone,
+  };
+  return date
+    .toLocaleString("en-US", options)
+    .replace(/,/g, "")
+    .replace(/\//g, "-");
+};
