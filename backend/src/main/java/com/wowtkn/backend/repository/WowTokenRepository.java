@@ -55,4 +55,14 @@ public interface WowTokenRepository extends JpaRepository<WowToken, Integer> {
      * @return 조건에 해당하는 {@link WowToken} 리스트
      */
     List<WowToken> findByRegionAndTimestampBetweenOrderByTimestampAsc(Region region, Long startTimestamp, Long endTimestamp);
+
+    /**
+     * 특정 지역에서 timestamp 이후의 WoW 토큰 데이터를 조회한다.
+     * 결과는 타임스탬프를 기준으로 내림차순으로 정렬된다.
+     *
+     * @param region    조회할 WoW 토큰의 지역
+     * @param timestamp 조회 시작 기준 타임스탬프
+     * @return {@link WowToken} 리스트
+     */
+    List<WowToken> findByRegionAndTimestampGreaterThanEqualOrderByTimestampDesc(Region region, Long timestamp);
 }
