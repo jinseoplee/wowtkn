@@ -2,8 +2,8 @@ package com.wowtkn.backend.service;
 
 import com.wowtkn.backend.common.Region;
 import com.wowtkn.backend.dto.CurrentWowTokenResponse;
+import com.wowtkn.backend.dto.PeriodRangeStats;
 import com.wowtkn.backend.dto.RegionStats;
-import com.wowtkn.backend.dto.TimeRangeStats;
 import com.wowtkn.backend.dto.WowTokenHistoryPoint;
 import com.wowtkn.backend.entity.WowToken;
 import com.wowtkn.backend.repository.WowTokenRepository;
@@ -93,7 +93,7 @@ public class WowTokenQueryServiceImpl implements WowTokenQueryService {
                     );
 
                     // 조회된 데이터를 바탕으로 기간별 (6h, 12h, 1d, 7d) 최고/최저가 통계를 생성한다.
-                    Map<String, TimeRangeStats> stats = calculatePriceStats(wowTokens, PERIOD_DURATIONS, currentTimeMillis);
+                    List<PeriodRangeStats> stats = calculatePriceStats(wowTokens, PERIOD_DURATIONS, currentTimeMillis);
                     return new RegionStats(region, stats);
                 })
                 .toList();
@@ -103,16 +103,16 @@ public class WowTokenQueryServiceImpl implements WowTokenQueryService {
      * 기간별 WoW 토큰의 최고/최저가 통계를 계산한다.
      *
      * @param wowTokens         {@link WowToken} 리스트
-     * @param periodDurations   기간 ("6h", "12h" 등)과 해당 기간의 밀리초 단위 값이 저장된 맵
+     * @param periodDurations   기간 ("6h", "12h", "1d", "1w")과 해당 기간의 밀리초 단위 값이 저장된 맵
      * @param currentTimeMillis 현재 시각
-     * @return 기간별 최고/최저가 통계 맵
+     * @return
      */
-    private Map<String, TimeRangeStats> calculatePriceStats(
+    private List<PeriodRangeStats> calculatePriceStats(
             List<WowToken> wowTokens,
             final Map<String, Long> periodDurations,
             long currentTimeMillis) {
 
-        Map<String, TimeRangeStats> stats = new LinkedHashMap<>();
+        List<PeriodRangeStats> statsList = new ArrayList<>();
 
         // 각 정의된 기간 범위(예: 6h, 12h, 1d, 7d)에 대해 통계를 계산한다.
         for (Map.Entry<String, Long> entry : periodDurations.entrySet()) {
@@ -134,9 +134,9 @@ public class WowTokenQueryServiceImpl implements WowTokenQueryService {
                 lowPrice = 0;
             }
 
-            stats.put(label, new TimeRangeStats(highPrice, lowPrice));
+            statsList.add(new PeriodRangeStats(label, highPrice, lowPrice));
         }
-        return stats;
+        return statsList;
     }
 
     /**
