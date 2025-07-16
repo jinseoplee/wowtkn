@@ -25,7 +25,7 @@ public class WowTokenQueryServiceImpl implements WowTokenQueryService {
         map.put("6h", 6L * 60 * 60 * 1000);
         map.put("12h", 12L * 60 * 60 * 1000);
         map.put("1d", 24L * 60 * 60 * 1000);
-        map.put("7d", 7L * 24 * 60 * 60 * 1000);
+        map.put("1w", 7L * 24 * 60 * 60 * 1000);
         PERIOD_DURATIONS = Collections.unmodifiableMap(map);
     }
 
@@ -86,13 +86,13 @@ public class WowTokenQueryServiceImpl implements WowTokenQueryService {
         return Arrays.stream(Region.values())
                 .map(region -> {
                     // 통계 계산에 필요한 7일치 데이터를 DB에서 조회한다.
-                    long sevenDaysAgoMillis = currentTimeMillis - PERIOD_DURATIONS.get("7d");
+                    long sevenDaysAgoMillis = currentTimeMillis - PERIOD_DURATIONS.get("1w");
                     List<WowToken> wowTokens = wowTokenRepository.findByRegionAndTimestampGreaterThanEqualOrderByTimestampDesc(
                             region,
                             sevenDaysAgoMillis
                     );
 
-                    // 조회된 데이터를 바탕으로 기간별 (6h, 12h, 1d, 7d) 최고/최저가 통계를 생성한다.
+                    // 조회된 데이터를 바탕으로 기간별 (6h, 12h, 1d, 1w) 최고/최저가 통계를 생성한다.
                     List<PeriodRangeStats> stats = calculatePriceStats(wowTokens, PERIOD_DURATIONS, currentTimeMillis);
                     return new RegionStats(region, stats);
                 })
@@ -114,7 +114,7 @@ public class WowTokenQueryServiceImpl implements WowTokenQueryService {
 
         List<PeriodRangeStats> statsList = new ArrayList<>();
 
-        // 각 정의된 기간 범위(예: 6h, 12h, 1d, 7d)에 대해 통계를 계산한다.
+        // 각 정의된 기간 범위(예: 6h, 12h, 1d, 1w)에 대해 통계를 계산한다.
         for (Map.Entry<String, Long> entry : periodDurations.entrySet()) {
             String label = entry.getKey();
             long durationMillis = entry.getValue();
