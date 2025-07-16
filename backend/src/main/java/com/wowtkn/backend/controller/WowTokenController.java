@@ -2,6 +2,7 @@ package com.wowtkn.backend.controller;
 
 import com.wowtkn.backend.common.Region;
 import com.wowtkn.backend.dto.CurrentWowTokenResponse;
+import com.wowtkn.backend.dto.RegionStats;
 import com.wowtkn.backend.dto.WowTokenHistoryPoint;
 import com.wowtkn.backend.service.WowTokenQueryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,5 +44,15 @@ public class WowTokenController {
     ) {
         List<WowTokenHistoryPoint> wowTokens = wowTokenQueryService.getWowTokensByRegionAndPeriod(region, startTime, endTime);
         return ResponseEntity.ok(wowTokens);
+    }
+
+    @Operation(
+            summary = "WoW 토큰 가격 통계 조회",
+            description = "모든 지역의 WoW 토큰 가격 통계 데이터를 조회합니다."
+    )
+    @GetMapping("/stats")
+    public ResponseEntity<List<RegionStats>> getAllRegionsWowTokenStats() {
+        List<RegionStats> stats = wowTokenQueryService.getAllRegionsWowTokenStats();
+        return ResponseEntity.ok(stats);
     }
 }
