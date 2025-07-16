@@ -2,20 +2,32 @@ package com.wowtkn.backend.service;
 
 import com.wowtkn.backend.common.Region;
 import com.wowtkn.backend.dto.CurrentWowTokenResponse;
+import com.wowtkn.backend.dto.RegionStats;
+import com.wowtkn.backend.dto.TimeRangeStats;
 import com.wowtkn.backend.dto.WowTokenHistoryPoint;
 import com.wowtkn.backend.entity.WowToken;
 import com.wowtkn.backend.repository.WowTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.Instant;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class WowTokenQueryServiceImpl implements WowTokenQueryService {
+
+    private static final Map<String, Long> PERIOD_DURATIONS;
+
+    static {
+        Map<String, Long> map = new LinkedHashMap<>();
+        map.put("6h", 6L * 60 * 60 * 1000);
+        map.put("12h", 12L * 60 * 60 * 1000);
+        map.put("1d", 24L * 60 * 60 * 1000);
+        map.put("7d", 7L * 24 * 60 * 60 * 1000);
+        PERIOD_DURATIONS = Collections.unmodifiableMap(map);
+    }
 
     private final WowTokenRepository wowTokenRepository;
 
@@ -64,6 +76,67 @@ public class WowTokenQueryServiceImpl implements WowTokenQueryService {
         return tokens.stream()
                 .map(token -> new WowTokenHistoryPoint(token.getTimestamp(), token.getPrice()))
                 .toList();
+    }
+
+    @Override
+    public List<RegionStats> getAllRegionsWowTokenStats() {
+        final long currentTimeMillis = Instant.now().toEpochMilli();
+
+        // 모든 지역을 순회하며 WoW 토큰 가격 통계를 계산하고 리스트로 반환한다.
+        return Arrays.stream(Region.values())
+                .map(region -> {
+                    // 통계 계산에 필요한 7일치 데이터를 DB에서 조회한다.
+                    long sevenDaysAgoMillis = currentTimeMillis - PERIOD_DURATIONS.get("7d");
+                    List<WowToken> wowTokens = wowTokenRepository.findByRegionAndTimestampGreaterThanEqualOrderByTimestampDesc(
+                            region,
+                            sevenDaysAgoMillis
+                    );
+
+                    // 조회된 데이터를 바탕으로 기간별 (6h, 12h, 1d, 7d) 최고/최저가 통계를 생성한다.
+                    Map<String, TimeRangeStats> stats = calculatePriceStats(wowTokens, PERIOD_DURATIONS, currentTimeMillis);
+                    return new RegionStats(region, stats);
+                })
+                .toList();
+    }
+
+    /**
+     * 기간별 WoW 토큰의 최고/최저가 통계를 계산한다.
+     *
+     * @param wowTokens         {@link WowToken} 리스트
+     * @param periodDurations   기간 ("6h", "12h" 등)과 해당 기간의 밀리초 단위 값이 저장된 맵
+     * @param currentTimeMillis 현재 시각
+     * @return 기간별 최고/최저가 통계 맵
+     */
+    private Map<String, TimeRangeStats> calculatePriceStats(
+            List<WowToken> wowTokens,
+            final Map<String, Long> periodDurations,
+            long currentTimeMillis) {
+
+        Map<String, TimeRangeStats> stats = new LinkedHashMap<>();
+
+        // 각 정의된 기간 범위(예: 6h, 12h, 1d, 7d)에 대해 통계를 계산한다.
+        for (Map.Entry<String, Long> entry : periodDurations.entrySet()) {
+            String label = entry.getKey();
+            long durationMillis = entry.getValue();
+
+            // 현재 시간 기준, 해당 기간 내의 가격 데이터를 필터링하고 통계를 요약한다.
+            IntSummaryStatistics summary = wowTokens.stream()
+                    .filter(token -> (currentTimeMillis - token.getTimestamp()) <= durationMillis)
+                    .mapToInt(WowToken::getPrice)
+                    .summaryStatistics();
+
+            int highPrice = summary.getMax();
+            int lowPrice = summary.getMin();
+
+            // 해당 기간에 데이터가 없으면 최고/최저가를 0으로 설정한다.
+            if (summary.getCount() == 0) {
+                highPrice = 0;
+                lowPrice = 0;
+            }
+
+            stats.put(label, new TimeRangeStats(highPrice, lowPrice));
+        }
+        return stats;
     }
 
     /**
