@@ -1,14 +1,12 @@
 package com.wowtkn.backend.service;
 
 import com.wowtkn.backend.client.WowTokenClient;
-import com.wowtkn.backend.client.dto.WowTokenResponse;
-import com.wowtkn.backend.common.Region;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,13 +19,12 @@ public class WowTokenCollectServiceImpl implements WowTokenCollectService {
     @Scheduled(cron = "0 * * * * *")
     @Override
     public void collectWowTokens() {
-        try {
-            Map<Region, WowTokenResponse> wowTokenResponseByRegion = wowTokenClient.fetchWowTokens();
-
-            wowTokenSaveService.saveWowTokens(wowTokenResponseByRegion);
-
-        } catch (Exception e) {
-            log.error("WoW 토큰 데이터 수집 및 저장 중 오류가 발생했습니다.", e);
-        }
+        wowTokenClient.fetchWowTokens()
+                .flatMap(wowTokens ->
+                        Mono.fromRunnable(() -> wowTokenSaveService.saveWowTokens(wowTokens))
+                                .subscribeOn(Schedulers.boundedElastic())
+                )
+                .doOnError(e -> log.error("WoW 토큰 데이터 수집 및 저장 중 오류가 발생했습니다.", e))
+                .subscribe();
     }
 }
