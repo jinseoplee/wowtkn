@@ -1,3 +1,9 @@
 spring:
   application:
     name: backend
+
+battlenet:
+  oauth:
+    client-id: ${CLIENT-ID}
+    client-secret: ${CLIENT-SECRET}
+    token-url: https://oauth.battle.net/token
