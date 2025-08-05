@@ -10,3 +10,4 @@ battlenet:
 
   wow-token:
     url: https://{region}.api.blizzard.com/data/wow/token/?namespace=dynamic-{region}
+    save-interval-millis: ${WOW_TOKEN_SAVE_INTERVAL_MILLIS}
