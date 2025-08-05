@@ -3,6 +3,7 @@ package com.wowtkn.backend.service;
 import com.wowtkn.backend.client.battlenet.AccessTokenClient;
 import com.wowtkn.backend.client.battlenet.WowTokenClient;
 import com.wowtkn.backend.client.battlenet.dto.BattleNetWowTokenResponse;
+import com.wowtkn.backend.dto.WowTokenResponse;
 import com.wowtkn.backend.entity.Region;
 import com.wowtkn.backend.entity.WowToken;
 import com.wowtkn.backend.repository.WowTokenRepository;
@@ -12,6 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -64,5 +66,17 @@ public class WowTokenServiceImpl implements WowTokenService {
 
     private int convertPrice(long price) {
         return (int) (price / COPPER_TO_GOLD_DIVISOR);
+    }
+
+    @Override
+    public List<WowTokenResponse> getWowTokens(Region region, int days) {
+        long now = System.currentTimeMillis();
+        long from = now - (days * (24 * 60 * 60 * 1000L));
+
+        List<WowToken> wowTokens = wowTokenRepository.findByRegionAndTimestampGreaterThanEqualOrderByTimestampAsc(region, from);
+
+        return wowTokens.stream()
+                .map(wowToken -> new WowTokenResponse(wowToken.getPrice(), wowToken.getTimestamp()))
+                .toList();
     }
 }
