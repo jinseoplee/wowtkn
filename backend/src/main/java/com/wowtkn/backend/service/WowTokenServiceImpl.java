@@ -2,7 +2,7 @@ package com.wowtkn.backend.service;
 
 import com.wowtkn.backend.client.battlenet.AccessTokenClient;
 import com.wowtkn.backend.client.battlenet.WowTokenClient;
-import com.wowtkn.backend.client.battlenet.dto.WowTokenResponse;
+import com.wowtkn.backend.client.battlenet.dto.BattleNetWowTokenResponse;
 import com.wowtkn.backend.entity.Region;
 import com.wowtkn.backend.entity.WowToken;
 import com.wowtkn.backend.repository.WowTokenRepository;
@@ -45,7 +45,7 @@ public class WowTokenServiceImpl implements WowTokenService {
 
     private void saveWowTokenForRegion(Region region, String accessToken) {
         try {
-            WowTokenResponse response = wowTokenClient.getWowToken(region, accessToken);
+            BattleNetWowTokenResponse response = wowTokenClient.getWowToken(region, accessToken);
 
             if (!wowTokenRepository.existsByRegionAndTimestamp(region, response.lastUpdatedTimestamp())) {
                 WowToken wowToken = WowToken.builder()
