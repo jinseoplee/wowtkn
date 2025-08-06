@@ -1,0 +1,40 @@
+:root {
+    --color-background: #15171e;
+    --color-background-surface: #23252b;
+
+    --color-text-light: #ffffff;
+    --color-text-muted: #aaaaaa;
+    --color-price-positive: #2ebd85;
+    --color-price-negative: #e24258;
+
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    color: var(--color-text-light);
+    background-color: var(--color-background);
+    font-family: system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+a {
+    color: var(--color-text-light);
+    text-decoration: none;
+    cursor: pointer;
+}
