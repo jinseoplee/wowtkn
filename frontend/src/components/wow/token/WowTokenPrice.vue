@@ -68,6 +68,7 @@ const props = defineProps({
   background-color: var(--color-background-surface);
   text-align: center;
   padding: 1rem;
+  border-radius: var(--border-radius-md);
 }
 
 .wow-token-prices__region-name {

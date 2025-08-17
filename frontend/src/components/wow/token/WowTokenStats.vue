@@ -61,6 +61,7 @@ const props = defineProps({
 
 .wow-token-stats__item {
   background-color: var(--color-background-surface);
+  border-radius: var(--border-radius-md);
   padding: 1rem;
   display: flex;
   flex-direction: column;

@@ -164,6 +164,7 @@ const chartOptions = computed(() => ({
 <style scoped>
 .wow-token-chart {
   background-color: var(--color-background-surface);
+  border-radius: var(--border-radius-md);
   padding: 1rem;
 }
 
