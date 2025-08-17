@@ -26,6 +26,7 @@ const props = defineProps({
   wowTokensByRegion: {
     type: Object,
     required: true,
+    default: () => ({}),
   },
 });
 
@@ -68,7 +69,7 @@ onUnmounted(() => {
 });
 
 const chartData = computed(() => {
-  const wowTokens = props.wowTokensByRegion[selectedRegion.value];
+  const wowTokens = props.wowTokensByRegion[selectedRegion.value] || [];
   const now = Date.now();
   const startTime = now - selectedDay.value * (24 * 60 * 60 * 1000);
 
@@ -127,7 +128,7 @@ const chartOptions = computed(() => ({
     <div class="wow-token-chart__control">
       <div class="wow-token-chart__button-group">
         <button
-          v-for="(_, region) in wowTokensByRegion"
+          v-for="(_, region) in wowTokensByRegion || []"
           :key="region"
           @click="selectRegion(region)"
           class="wow-token-chart__button"
