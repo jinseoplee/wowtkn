@@ -25,7 +25,7 @@ const props = defineProps({
             'wow-token-prices__current-price--negative': data.changeAmount < 0,
           }"
         >
-          {{ data.currentPrice.toLocaleString() }}
+          {{ data?.currentPrice?.toLocaleString() ?? "-" }}
         </p>
         <p
           class="wow-token-prices__change"
@@ -34,11 +34,11 @@ const props = defineProps({
             'wow-token-prices__change--negative': data.changeAmount < 0,
           }"
         >
-          {{ data.changeAmount.toLocaleString() }}
-          ({{ data.changeRate.toFixed(2) }}%)
+          {{ data?.changeAmount?.toLocaleString() ?? "-" }}
+          ({{ data?.changeRate?.toFixed(2) ?? "-" }}%)
         </p>
         <p class="wow-token-prices__time-ago">
-          {{ data.timeAgo }}
+          {{ data?.timeAgo ?? "-" }}
         </p>
       </div>
     </div>
@@ -68,6 +68,7 @@ const props = defineProps({
   background-color: var(--color-background-surface);
   text-align: center;
   padding: 1rem;
+  border-radius: var(--border-radius-md);
 }
 
 .wow-token-prices__region-name {
