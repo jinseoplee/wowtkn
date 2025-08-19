@@ -7,6 +7,9 @@
     --color-price-positive: #2ebd85;
     --color-price-negative: #e24258;
 
+    --color-button-bg: #3a3c45;
+    --color-button-bg-active: #00cfff;
+
     --font-size-xs: 0.75rem;
     --font-size-sm: 0.875rem;
     --font-size: 1rem;
