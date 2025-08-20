@@ -124,7 +124,7 @@ const chartOptions = computed(() => ({
 
 <template>
   <div class="wow-token-chart">
-    <h2 class="wow-token-chart__title">WoW Token price chart</h2>
+    <h2 class="wow-token-chart__title">WoW Token Price Chart</h2>
     <div class="wow-token-chart__control">
       <div class="wow-token-chart__button-group">
         <button
@@ -170,14 +170,8 @@ const chartOptions = computed(() => ({
 
 .wow-token-chart__title {
   text-align: center;
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-2xl);
   margin-bottom: 1rem;
-}
-
-@media (min-width: 768px) {
-  .wow-token-chart__title {
-    font-size: var(--font-size-xl);
-  }
 }
 
 .wow-token-chart__control {
@@ -188,20 +182,23 @@ const chartOptions = computed(() => ({
 
 .wow-token-chart__button-group {
   display: flex;
-  gap: 4px;
+  gap: 0.375rem;
 }
 
 .wow-token-chart__button {
-  background-color: transparent;
+  background-color: var(--color-button-bg);
+  border-radius: var(--border-radius-md);
   border: none;
+  cursor: pointer;
   color: var(--color-text-light);
   font-size: var(--font-size);
-  padding: 4px;
-  cursor: pointer;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
 }
 
 .wow-token-chart__button--active {
-  color: #00cfff;
+  background-color: var(--color-button-bg-active);
+  color: var(--color-background);
 }
 
 .wow-token-chart__chart-wrapper {
@@ -211,8 +208,20 @@ const chartOptions = computed(() => ({
 }
 
 @media (min-width: 768px) {
+  .wow-token-chart__title {
+    font-size: var(--font-size-3xl);
+  }
+
   .wow-token-chart__chart-wrapper {
     height: 350px;
+  }
+
+  .wow-token-chart__button-group {
+    gap: 0.5rem;
+  }
+
+  .wow-token-chart__button {
+    padding: 0.5rem 0.75rem;
   }
 }
 
