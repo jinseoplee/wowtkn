@@ -1,7 +1,14 @@
 @import './base.css';
 
 #app {
-    max-width: 1280px;
     margin: 0 auto;
     padding: 0 1rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    max-width: 1280px;
+}
+
+main {
+    flex: 1;
 }
