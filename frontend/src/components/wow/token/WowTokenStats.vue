@@ -30,8 +30,12 @@ const props = defineProps({
           <tbody>
             <tr v-for="(stats, period) in periodStats" :key="period">
               <td>{{ period }}</td>
-              <td>{{ stats.min?.toLocaleString() ?? "-" }}</td>
-              <td>{{ stats.max?.toLocaleString() ?? "-" }}</td>
+              <td class="wow-token-stats__table-cell--min">
+                {{ stats.min?.toLocaleString() ?? "-" }}
+              </td>
+              <td class="wow-token-stats__table-cell--max">
+                {{ stats.max?.toLocaleString() ?? "-" }}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -47,9 +51,53 @@ const props = defineProps({
   gap: 1rem;
 }
 
+.wow-token-stats__item {
+  background-color: var(--color-background-surface);
+  border-radius: var(--border-radius-md);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.wow-token-stats__region-name {
+  font-size: var(--font-size-2xl);
+  font-weight: bold;
+}
+
+.wow-token-stats__table {
+  width: 100%;
+  text-align: center;
+}
+
+.wow-token-stats__table th {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  padding: 0.5rem 0;
+  letter-spacing: 0.05em;
+}
+
+.wow-token-stats__table td {
+  padding: 0.5rem 0;
+  background-color: #1f1f25;
+  border-radius: var(--border-radius-md);
+}
+
+.wow-token-stats__table-cell--min {
+  color: var(--color-price-negative);
+}
+
+.wow-token-stats__table-cell--max {
+  color: var(--color-price-positive);
+}
+
 @media (min-width: 768px) {
   .wow-token-stats {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .wow-token-stats__region-name {
+    font-size: var(--font-size-3xl);
   }
 }
 
@@ -57,54 +105,5 @@ const props = defineProps({
   .wow-token-stats {
     grid-template-columns: repeat(4, 1fr);
   }
-}
-
-.wow-token-stats__item {
-  background-color: var(--color-background-surface);
-  border-radius: var(--border-radius-md);
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-}
-
-.wow-token-stats__item-header {
-  text-align: center;
-  margin-bottom: 0.5rem;
-}
-
-.wow-token-stats__region-name {
-  font-size: var(--font-size-lg);
-  font-weight: bold;
-}
-
-@media (min-width: 768px) {
-  .wow-token-stats__region-name {
-    font-size: var(--font-size-xl);
-  }
-}
-
-.wow-token-stats__table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: center;
-  table-layout: fixed;
-}
-
-.wow-token-stats__table th {
-  padding: 0.5rem 0;
-}
-
-.wow-token-stats__table td {
-  padding: 0.5rem 0;
-  border-top: 1px solid #2a2c33;
-}
-
-.wow-token-stats__table td:nth-child(2) {
-  color: var(--color-price-negative);
-}
-
-.wow-token-stats__table td:nth-child(3) {
-  color: var(--color-price-positive);
 }
 </style>
