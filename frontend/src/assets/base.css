@@ -7,13 +7,18 @@
     --color-price-positive: #2ebd85;
     --color-price-negative: #e24258;
 
+    --color-button-bg: #3a3c45;
+    --color-button-bg-active: #00cfff;
+
     --font-size-xs: 0.75rem;
     --font-size-sm: 0.875rem;
     --font-size: 1rem;
     --font-size-lg: 1.125rem;
     --font-size-xl: 1.25rem;
     --font-size-2xl: 1.5rem;
-    --font-size-3xl: 1.875rem;
+    --font-size-3xl: 1.75rem;
+    --font-size-4xl: 2rem;
+    --font-size-5xl: 2.5rem;
 
     --border-radius-sm: 4px;
     --border-radius-md: 8px;

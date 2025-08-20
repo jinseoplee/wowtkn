@@ -8,7 +8,7 @@
 
 <style scoped>
 .app-footer {
-  height: 60px;
+  height: 80px;
 }
 
 .app-footer__inner {
@@ -18,5 +18,6 @@
   align-items: center;
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
+  letter-spacing: 0.03em;
 }
 </style>
