@@ -25,6 +25,22 @@ const { wowTokensByRegion, currentPriceByRegion, wowTokenStats } = useWowTokens(
 .home-view {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .home-view {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-view {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
 }
 </style>
