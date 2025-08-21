@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 @Component
@@ -18,7 +19,7 @@ public class AccessTokenClientImpl implements AccessTokenClient {
     private final BattlenetOauthProperties properties;
 
     @Override
-    public AccessTokenResponse getAccessToken() {
+    public Mono<AccessTokenResponse> getAccessToken() {
         return webClient.post()
                 .uri(properties.getTokenUrl())
                 .headers(headers -> headers.setBasicAuth(
@@ -27,7 +28,6 @@ public class AccessTokenClientImpl implements AccessTokenClient {
                 ))
                 .body(BodyInserters.fromFormData(GRANT_TYPE, CLIENT_CREDENTIALS))
                 .retrieve()
-                .bodyToMono(AccessTokenResponse.class)
-                .block();
+                .bodyToMono(AccessTokenResponse.class);
     }
 }
